@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Audio Processing</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='css/images/logo.svg') }}" alt="Vision X Studios Logo">
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/image-editing">Image Editing</a></li>
+                <li><a href="/animation">Animation</a></li>
+                <li><a href="/audio-processing">Audio Processing</a></li>
+                <li><a href="/text-generation">Text Generation</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <h1 style="color: white; text-align: center;">AI-Powered Audio Processing</h1>
+
+    <div class="form-container" style="background-color: #f2f2f2; padding: 20px; border-radius: 8px; max-width: 800px; margin: 0 auto;">
+        <!-- Form for uploading audio and applying edits -->
+        <form method="POST" action="/audio-processing" enctype="multipart/form-data" id="audioForm">
+            <div class="form-group">
+                <label for="audio" style="color: #333;">Upload an audio file (MP3, WAV, or OGG):</label>
+                <input type="file" id="audio" name="audio" accept=".mp3,.wav,.ogg" style="display: block; padding: 10px 0;">
+            </div>
+            <div class="form-group">
+                <label for="process-options" style="color: #333;">Select an audio processing option:</label>
+                <select id="process-options" name="process_option" style="width: 100%; padding: 10px;">
+                    <option value="noise-reduction">Noise Reduction</option>
+                    <option value="equalization">Equalization</option>
+                    <option value="compression">Compression</option>
+                    <option value="add-effects">Add Effects</option>
+                    <option value="pitch-shift">Pitch Shift</option>
+                    <option value="time-stretch">Time Stretch</option>
+                </select>
+            </div>
+            <button type="submit" class="app-link">Process Audio</button>
+        </form>
+
+        <div id="progressBar" style="display: none; margin-top: 20px;">
+            <div style="width: 100%; background-color: #ddd; border-radius: 5px;">
+                <div id="progress" style="width: 0%; height: 30px; background-color: #4CAF50; border-radius: 5px; text-align: center; line-height: 30px; color: white;">0%</div>
+            </div>
+        </div>
+
+        <!-- Display the processed audio file if available -->
+        {% if processed_audio %}
+            <div class="output-section" style="margin-top: 20px; padding: 10px; background-color: #e9e9e9; border-radius: 5px;">
+                <h3 style="color: #333;">Processed Audio:</h3>
+                <audio controls>
+                    <source src="{{ processed_audio }}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        {% endif %}
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 VisionX Studios. All rights reserved.</p>
+</footer>
+
+<script>
+document.getElementById('audioForm').onsubmit = function() {
+    document.getElementById('progressBar').style.display = 'block';
+    var progress = 0;
+    var intervalId = setInterval(function() {
+        progress += 10;
+        if (progress > 100) progress = 100;
+        document.getElementById('progress').style.width = progress + '%';
+        document.getElementById('progress').innerHTML = progress + '%';
+        if (progress == 100) clearInterval(intervalId);
+    }, 500);
+};
+</script>
+
+</body>
+</html>

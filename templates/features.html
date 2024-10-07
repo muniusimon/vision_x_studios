@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Features - VisionX Studios{% endblock %}
+
+{% block content %}
+<h1>VisionX Studios Features</h1>
+<section>
+    <h2>Image Editing</h2>
+    <p>Description of image editing features...</p>
+    <a href="{{ url_for('image_editing') }}" class="feature-button">Try Image Editing</a>
+</section>
+<section>
+    <h2>Animation</h2>
+    <p>Description of animation features...</p>
+    <a href="{{ url_for('animation') }}" class="feature-button">Try Animation</a>
+</section>
+<section>
+    <h2>Audio Processing</h2>
+    <p>Description of audio processing features...</p>
+    <a href="{{ url_for('audio_processing') }}" class="feature-button">Try Audio Processing</a>
+</section>
+<section>
+    <h2>Text Generation</h2>
+    <p>Description of text generation features...</p>
+    <a href="{{ url_for('text_generation') }}" class="feature-button">Try Text Generation</a>
+</section>
+{% endblock %}

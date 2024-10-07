@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}VisionX Studios{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="{{ url_for('home') }}">
+                    <img src="{{ url_for('static', filename='css/images/logo.svg') }}" alt="Vision X Studios Logo">
+                </a>
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('features') }}" class="nav-link">Features</a></li>
+                        <li><a href="{{ url_for('logout') }}" class="nav-link">Sign Out</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}" class="nav-link">Sign In</a></li>
+                        <li><a href="{{ url_for('signup') }}" class="nav-link">Sign Up</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 VisionX Studios. All rights reserved.</p>
+    </footer>
+</body>
+</html>

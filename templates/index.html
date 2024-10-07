@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Home - VisionX Studios{% endblock %}
+
+{% block header %}
+<header>
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="VisionX Studios Logo" class="logo">
+    {{ super() }}
+</header>
+{% endblock %}
+
+{% block content %}
+<section class="intro">
+    <h2>Unleash Your Creativity with AI</h2>
+    <p>Welcome to VisionX Studios Creative AI—the next-generation platform where creativity meets cutting-edge AI technology.</p>
+    <p>Whether you're a seasoned professional or an aspiring artist, VisionX empowers you to bring your ideas to life with tools that simplify, enhance, and revolutionize the creative process.</p>
+    <p>Get started with our powerful tools for text generation, image processing, and multimedia creation.</p>
+    <a href="{{ url_for('explore_features') }}" class="cta-button">Explore Our Features</a>
+</section>
+{% endblock %}

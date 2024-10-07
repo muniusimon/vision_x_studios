@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Animation Processing</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <a href="/" class="logo-link">
+                <img src="{{ url_for('static', filename='css/images/logo.svg') }}" alt="Vision X Studios Logo">
+            </a>
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/image-editing">Image Editing</a></li>
+                <li><a href="/animation">Animation</a></li>
+                <li><a href="/audio-processing">Audio Processing</a></li>
+                <li><a href="/text-generation">Text Generation</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <h1 style="color: white; text-align: center;">AI Animation Processing and Generation</h1>
+
+    <div class="form-container" style="background-color: #f2f2f2; padding: 20px; border-radius: 8px; max-width: 800px; margin: 0 auto;">
+        <!-- Form for uploading animation or generating animations -->
+        <form method="POST" action="/animation" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="animation" style="color: #333;">Upload an animation file or create one:</label>
+                <input type="file" id="animation" name="animation" accept="video/*" style="display: block; padding: 10px 0;">
+            </div>
+            <div class="form-group">
+                <label for="animation-options" style="color: #333;">Select an animation processing option:</label>
+                <select id="animation-options" name="animation_option" style="width: 100%; padding: 10px;">
+                    <option value="speed-up">Speed Up</option>
+                    <option value="slow-down">Slow Down</option>
+                    <option value="apply-filter">Apply Filter</option>
+                    <option value="generate-from-text">Generate from Text</option>
+                    <option value="trim">Trim</option>
+                    <option value="add-overlay">Add Overlay</option>
+                    <option value="adjust-brightness">Adjust Brightness/Contrast</option>
+                </select>
+            </div>
+            <div class="form-group" id="text-generation-input" style="display: none;">
+                <label for="animation-text" style="color: #333;">Enter text to generate an animation:</label>
+                <textarea id="animation-text" name="animation_text" rows="4" style="width: 100%; padding: 10px;" placeholder="Describe the animation you want to generate..."></textarea>
+            </div>
+            <div class="form-group" id="filter-options" style="display: none;">
+                <label for="filter-type" style="color: #333;">Select a filter:</label>
+                <select id="filter-type" name="filter_type" style="width: 100%; padding: 10px;">
+                    <option value="grayscale">Grayscale</option>
+                    <option value="sepia">Sepia</option>
+                    <option value="blur">Blur</option>
+                    <option value="invert">Invert Colors</option>
+                </select>
+            </div>
+            <div id="processing-indicator" style="display: none; text-align: center; margin-top: 20px;">
+                <div class="spinner"></div>
+                <p>Processing your animation...</p>
+            </div>
+            <button type="submit" class="app-link" id="submit-button">Process Animation</button>
+        </form>
+
+        <!-- Display the processed animation if available -->
+        {% if processed_animation %}
+            <div class="output-section" style="margin-top: 20px; padding: 10px; background-color: #e9e9e9; border-radius: 5px;">
+                <h3 style="color: #333;">Processed Animation:</h3>
+                <video controls style="max-width: 100%; border-radius: 5px;">
+                    <source src="{{ processed_animation }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        {% endif %}
+    </div>
+
+    <div id="preview-container" style="margin-top: 20px; display: none;">
+        <h3 style="color: #333;">Preview:</h3>
+        <video id="preview-video" controls style="max-width: 100%; border-radius: 5px;">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 VisionX Studios. All rights reserved.</p>
+</footer>
+
+<script>
+    const animationOptions = document.getElementById("animation-options");
+    const textGenerationInput = document.getElementById("text-generation-input");
+    const filterOptions = document.getElementById("filter-options");
+    const animationInput = document.getElementById("animation");
+    const previewContainer = document.getElementById("preview-container");
+    const previewVideo = document.getElementById("preview-video");
+    const processingIndicator = document.getElementById("processing-indicator");
+    const submitButton = document.getElementById("submit-button");
+
+    animationOptions.addEventListener("change", function() {
+        textGenerationInput.style.display = this.value === "generate-from-text" ? "block" : "none";
+        filterOptions.style.display = this.value === "apply-filter" ? "block" : "none";
+    });
+
+    animationInput.addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const objectURL = URL.createObjectURL(file);
+            previewVideo.src = objectURL;
+            previewContainer.style.display = "block";
+        }
+    });
+
+    submitButton.addEventListener("click", function(event) {
+        event.preventDefault();
+        processingIndicator.style.display = "block";
+        submitButton.disabled = true;
+        // Simulate processing delay
+        setTimeout(() => {
+            document.querySelector("form").submit();
+        }, 2000);
+    });
+</script>
+
+<style>
+    .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+</body>
+</html>
