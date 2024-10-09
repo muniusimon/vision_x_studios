@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container">
+    <h1>VisionX Idea Generator</h1>
+    <form method="POST">
+        <label for="keywords">Keywords:</label>
+        <input type="text" id="keywords" name="keywords" placeholder="Enter keywords" required>
+
+        <label for="themes">Themes:</label>
+        <input type="text" id="themes" name="themes" placeholder="Enter themes" required>
+
+        <label for="concepts">Concepts:</label>
+        <input type="text" id="concepts" name="concepts" placeholder="Enter concepts" required>
+
+        <button type="submit">Generate Creative Prompt</button>
+    </form>
+
+    {% if creative_prompt %}
+    <div class="result">
+        {{ creative_prompt }}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock content %}

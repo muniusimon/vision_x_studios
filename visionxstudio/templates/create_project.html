@@ -1,0 +1,25 @@
+
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Create New Project</h2>
+    <div class="col-md-6 mx-auto">
+        <form method="POST" action="{{ url_for('new_project') }}">
+            {{ form.hidden_tag() }}
+
+            <!-- Form Group for Project Name -->
+            <div class="form-group">
+                {{ form.name.label(class="form-label") }}
+                {{ form.name(class="form-control") }}
+            </div>
+
+            <!-- Form Group for Description -->
+            <div class="form-group">
+                {{ form.description.label(class="form-label") }}
+                {{ form.description(class="form-control") }}
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Create Project</button>
+        </form>
+    </div>
+{% endblock %}

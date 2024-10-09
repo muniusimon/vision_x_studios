@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h2>Your Projects</h2>
+    
+    <!-- Bootstrap List Group -->
+    <div class="list-group">
+        {% for project in projects %}
+            <a href="#" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ project.name }}</h5>
+                    <small>{{ project.date_created.strftime('%Y-%m-%d') }}</small>
+                </div>
+                <p class="mb-1">{{ project.status }}</p>
+            </a>
+        {% else %}
+            <p class="list-group-item">No projects found</p>
+        {% endfor %}
+    </div>
+{% endblock %}
