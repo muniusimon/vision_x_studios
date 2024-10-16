@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Features - VisionX Studios{% endblock %}
+
+{% block content %}
+<div class="features-container">
+    <h1 class="features-title">VisionX Studios Features</h1>
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="feature-box">
+                <div class="feature-card">
+                    <i class="fas fa-image feature-icon"></i>
+                    <h2 class="feature-heading">Image Editing and Generation</h2>
+                    <p>Use our sophisticated image manipulation tools such as neural filters, deep learning-based
+                        retouching, and style transfer options.</p>
+                </div>
+                <a href="{{ url_for('image_generation') }}" class="feature-button image-button">
+                    <i class="fas fa-arrow-right"></i> Try Advanced Image Editing and Generation
+                </a>
+            </div>
+            <div class="feature-box">
+                <div class="feature-card">
+                    <i class="fas fa-film feature-icon"></i>
+                    <h2 class="feature-heading">Custom Animation Suite</h2>
+                    <p>Tools for creating and editing animations with keyframe controls, motion tracking, and
+                        AI-driven effects.</p>
+                </div>
+                <a href="{{ url_for('animation') }}" class="feature-button animation-button">
+                    <i class="fas fa-arrow-right"></i> Try Animation Suite
+                </a>
+            </div>
+            <div class="feature-box">
+                <div class="feature-card">
+                    <i class="fas fa-volume-up feature-icon"></i>
+                    <h2 class="feature-heading">High-Level Audio Integration</h2>
+                    <p>Advanced sound design capabilities, including multi-layered audio tracks and real-time
+                        sound synthesis</p>
+                </div>
+                <a href="{{ url_for('audio_processing') }}" class="feature-button audio-button">
+                    <i class="fas fa-arrow-right"></i> Try Audio Processing and Integration
+                </a>
+            </div>
+            <div class="feature-box">
+                <div class="feature-card">
+                    <i class="fas fa-cube feature-icon"></i>
+                    <h2 class="feature-heading">3D Modeling and Rendering</h2>
+                    <p>Add-ons for 3D content creation, including text generation 3D-modeling, rendering, and physics simulations features</p>
+                </div>
+                <a href="{{ url_for('text_generation') }}" class="feature-button modeling-button">
+                    <i class="fas fa-arrow-right"></i> Try 3D Text Generation
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow-x: hidden;
+    }
+    .features-container {
+        min-height: 100vh;
+        width: 100%;
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        color: #e94560;
+        padding: 2rem;
+        box-sizing: border-box;
+    }
+    .features-title {
+        font-size: 3rem;
+        text-align: center;
+        margin-bottom: 3rem;
+        color: #FFD700; /* Changed to yellow */
+    }
+    .features-grid {
+        /* Remove this class as it's no longer needed */
+    }
+    .feature-box {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(4px);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+    .feature-card {
+        flex-grow: 1;
+        margin-bottom: 1rem;
+    }
+    .feature-icon {
+        font-size: 10rem;
+        margin-bottom: 5.5rem;
+        color: #00FF00;
+    }
+    .feature-heading {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #FFD700; /* Changed to yellow */
+    }
+    .feature-button {
+        display: inline-block;
+        color: #FFD700;
+        padding: 0.75rem 1.5rem;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        margin-top: auto;
+    }
+    .feature-button:hover {
+        color: #FFD700;
+        transform: scale(1.05);
+    }
+    .image-button {
+        background-color: #4CAF50;
+    }
+    .image-button:hover {
+        background-color: #45a049;
+    }
+    .animation-button {
+        background-color: #2196F3;
+    }
+    .animation-button:hover {
+        background-color: #1e87db;
+    }
+    .audio-button {
+        background-color: #9C27B0;
+    }
+    .audio-button:hover {
+        background-color: #8e24aa;
+    }
+    .modeling-button {
+        background-color: #FF9800;
+    }
+    .modeling-button:hover {
+        background-color: #f57c00;
+    }
+    @media (max-width: 768px) {
+        .features-title {
+            font-size: 2.5rem;
+        }
+        .feature-heading {
+            font-size: 1.75rem;
+        }
+        .feature-box {
+            padding: 1.5rem;
+        }
+        .feature-button {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+{% endblock %}

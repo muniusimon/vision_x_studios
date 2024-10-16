@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Vision X Studios - AI-Powered Creative Tools{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4">
+    <!-- Hero Section -->
+    <section class="text-center py-20">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">
+            <span class="gradient-text">Create Stunning AI Arts, Audios and Videos</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-300 mb-10">
+            Unleash your creativity with our cutting-edge AI tools
+        </p>
+        <!-- Commented out the "Start Creating" button
+        <a href="{{ url_for('ai_art_generator') }}" class="btn-primary text-lg py-3 px-8">
+            Start Creating
+        </a>
+        -->
+    </section>
+
+    <!-- Image Container -->
+    <div class="w-full h-64 mb-8 overflow-hidden rounded-lg shadow-lg relative interactive-image">
+        <img src="{{ url_for('static', filename='css/images/art2.jpg') }}" alt="AI-generated art" class="w-full h-full object-cover transition-transform duration-300 ease-out">
+    </div>
+
+    <!-- Features Grid -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-16">
+        {% for feature in features %}
+        <div class="card">
+            <h3 class="text-2xl font-semibold mb-4">{{ feature.title }}</h3>
+            <p class="text-gray-300 mb-4">{{ feature.description }}</p>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for(feature.url) }}" class="text-accent-color hover:underline">{{ feature.link_text }} →</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="text-accent-color hover:underline">Log in to access →</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </section>
+
+    <!-- AI Models Section -->
+    <section class="py-16">
+        <h2 class="text-3xl font-bold mb-8 text-center">AI-Powered Visual Creation</h2>
+        <h2 class="text-3xl font-bold mb-8 text-center">Powered by Advanced AI Models</h2>
+        <div class="flex flex-wrap justify-center gap-4">
+            {% for model in ai_models %}
+                <span class="bg-secondary-bg text-sm font-medium px-3 py-1 rounded-full">{{ model }}</span>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Feature Section -->
+    <section class="feature-section">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center mb-8 md:mb-0">
+                    <div class="feature-box">
+                        <i class="fas fa-paint-brush feature-icon"></i>
+                        <h3 class="text-xl font-semibold mb-2">Image Generation</h3>
+                        <p class="text-gray-300">Create stunning visuals with our state-of-the-art AI algorithms</p>
+                    </div>
+                </div>
+                <div class="text-center mb-8 md:mb-0">
+                    <div class="feature-box">
+                        <i class="fas fa-magic feature-icon"></i>
+                        <h3 class="text-xl font-semibold mb-2">Text Generation</h3>
+                        <p class="text-gray-300">Write your own stories with our AI-powered text generator</p>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="feature-box">
+                        <i class="fas fa-rocket feature-icon"></i>
+                        <h3 class="text-xl font-semibold mb-2">Video Generation</h3>
+                        <p class="text-gray-300">Bring your ideas to life faster than ever before with our video generation tool</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="text-center py-20">
+        <h2 class="text-4xl font-bold mb-6">Ready to Transform Your Creative Process?</h2>
+        <p class="text-xl text-gray-300 mb-10">Join thousands of artists and creators using Vision X Studios</p>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('index') }}" class="btn-primary text-lg py-3 px-8">Go to Dashboard</a>
+        {% else %}
+            <a href="{{ url_for('signup') }}" class="btn-primary text-lg py-3 px-8">Sign Up Now</a>
+        {% endif %}
+    </section>
+</div>
+
+<style>
+    .interactive-image {
+        perspective: 1000px;
+    }
+    .interactive-image img {
+        transform-style: preserve-3d;
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+    const container = document.querySelector('.interactive-image');
+    const image = container.querySelector('img');
+
+    container.addEventListener('mousemove', (e) => {
+        const { left, top, width, height } = container.getBoundingClientRect();
+        const x = (e.clientX - left) / width - 0.5;
+        const y = (e.clientY - top) / height - 0.5;
+
+        image.style.transform = `
+            rotateY(${x * 10}deg)
+            rotateX(${-y * 10}deg)
+            scale3d(1.05, 1.05, 1.05)
+        `;
+    });
+
+    container.addEventListener('mouseleave', () => {
+        image.style.transform = 'rotateY(0) rotateX(0) scale3d(1, 1, 1)';
+    });
+});
+</script>
+{% endblock %}

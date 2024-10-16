@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About VisionX Studios Creative AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/visionX_studios_logo.svg') }}" alt="VisionX studios Logo">
+                <h1>VisionX Studios Creative AI</h1>
+            </div>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="about">
+            <h2>About VisionX Studios</h2>
+            <p>VisionX Studios is at the forefront of AI-powered creative tools, empowering artists, designers, and content creators to push the boundaries of their imagination.</p>
+            
+            <h3>Our Mission</h3>
+            <p>Our mission is to democratize creativity by providing cutting-edge AI tools that enhance and streamline the creative process, making it accessible to professionals and enthusiasts alike.</p>
+            
+            <h3>Our Team</h3>
+            <p>Behind VisionX Studios is a diverse team of AI researchers, software engineers, artists, and designers. We're united by our passion for technology and creativity, and our belief in the transformative power of AI in the creative industries.</p>
+            
+            <h3>Our Technology</h3>
+            <p>VisionX Studios leverages state-of-the-art machine learning models and AI algorithms to provide a suite of tools that assist in various aspects of the creative process, from ideation to execution.</p>
+        </section>
+
+        <section class="apps">
+            <h3>Why VisionX Studios Creative AI?</h3>
+            <p>At VisionX, we believe in the power of innovation. Our platform is designed to support creativity in all its forms, from generating stunning visuals and compelling narratives to crafting immersive multimedia experiences. With VisionX, the possibilities are endless, and your creative vision has no boundaries.</p>
+            <h4>Our Key Features Include:</h4>
+            <ul>
+                <li><strong>AI-Powered Content Creation:</strong> Our platform integrates state-of-the-art AI technology to assist with text generation, image enhancement, animation, and multimedia composition. Whether you need assistance with storytelling, visual effects, or sound design, VisionX provides the tools you need.</li>
+                <li><strong>User-Friendly Interface:</strong> Intuitive and flexible, our interface is built with creators in mind. Drag-and-drop functionality, familiar icons, and an adaptable layout make the creative process seamless—no technical expertise required.</li>
+                <li><strong>Modular Add-On System:</strong> Tailor VisionX to your specific needs. Unlock advanced features such as neural image filters, custom animations, high-level audio design, and even 3D modeling through modular add-ons, all easily accessible when you're ready.</li>
+                <li><strong>Custom AI Training:</strong> Fine-tune the AI to match your style. Train the system with your datasets to generate content that reflects your unique creative preferences, whether it's writing, design, or video.</li>
+                <li><strong>Cross-Platform Compatibility:</strong> VisionX works where you do. Whether you're on a desktop, tablet, or smartphone, enjoy seamless performance across all your devices.</li>
+            </ul>
+            <h5>Why Choose VisionX?</h5>
+            <ul>
+                <li><strong>Adaptive AI:</strong> The more you create, the better VisionX understands your style, offering suggestions that evolve with your creative journey.</li>
+                <li><strong>Scalability:</strong> Start simple and scale up. Our modular system allows you to expand features as your projects grow in complexity.</li>
+                <li><strong>Continuous Development:</strong> We are committed to bringing you regular updates and new features.</li>
+                <li>Engage with our vibrant community of creators, and help shape the future of VisionX.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <p>&copy; 2024 VisionX Studios. All rights reserved.</p>
+                <p><a href="{{ url_for('privacy_policy') }}">Privacy Policy</a> | <a href="{{ url_for('terms_of_service') }}">Terms of Service</a></p>
+            </div>
+            <div class="footer-right">
+                <p>Follow Us:</p>
+                <a href="https://twitter.com/VisionXStudios" target="_blank">Twitter</a> |
+                <a href="https://facebook.com/VisionXStudios" target="_blank">Facebook</a> |
+                <a href="https://instagram.com/VisionXStudios" target="_blank">Instagram</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

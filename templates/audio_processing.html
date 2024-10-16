@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Audio Processing and Generation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='css/images/logo.svg') }}" alt="Vision X Studios Logo">
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/image-generation">Image Generation</a></li>
+                <li><a href="/animation">Animation</a></li>
+                <li><a href="/audio-processing">Audio Processing</a></li>
+                <li><a href="/text-generation">Text Generation</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <h1 style="color: white; text-align: center;">AI-Powered Audio Processing and Generation</h1>
+
+    <div class="form-container" style="background-color: #f2f2f2; padding: 20px; border-radius: 8px; max-width: 800px; margin: 0 auto;">
+        <!-- Form for uploading audio, generating audio, and applying edits -->
+        <form method="POST" action="/audio-processing" enctype="multipart/form-data" id="audioForm">
+            <div class="form-group">
+                <label for="audio-action" style="color: #333;">Choose an action:</label>
+                <select id="audio-action" name="audio_action" style="width: 100%; padding: 10px;">
+                    <option value="process">Process Existing Audio</option>
+                    <option value="generate">Generate New Audio</option>
+                </select>
+            </div>
+
+            <div id="upload-section" class="form-group">
+                <label for="audio" style="color: #333;">Upload an audio file (MP3, WAV, or OGG):</label>
+                <input type="file" id="audio" name="audio" accept=".mp3,.wav,.ogg" style="display: block; padding: 10px 0;">
+            </div>
+
+            <div id="generate-section" class="form-group" style="display: none;">
+                <label for="prompt" style="color: #333;">Enter a prompt for audio generation:</label>
+                <textarea id="prompt" name="prompt" rows="4" style="width: 100%; padding: 10px;"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="process-options" style="color: #333;">Select an audio processing option:</label>
+                <select id="process-options" name="process_option" style="width: 100%; padding: 10px;">
+                    <option value="noise-reduction">Noise Reduction</option>
+                    <option value="equalization">Equalization</option>
+                    <option value="compression">Compression</option>
+                    <option value="add-effects">Add Effects</option>
+                    <option value="pitch-shift">Pitch Shift</option>
+                    <option value="time-stretch">Time Stretch</option>
+                </select>
+            </div>
+            <button type="submit" class="app-link">Process/Generate Audio</button>
+        </form>
+
+        <div id="progressBar" style="display: none; margin-top: 20px;">
+            <div style="width: 100%; background-color: #ddd; border-radius: 5px;">
+                <div id="progress" style="width: 0%; height: 30px; background-color: #4CAF50; border-radius: 5px; text-align: center; line-height: 30px; color: white;">0%</div>
+            </div>
+        </div>
+
+        <!-- Display the processed or generated audio file if available -->
+        {% if output_audio %}
+            <div class="output-section" style="margin-top: 20px; padding: 10px; background-color: #e9e9e9; border-radius: 5px;">
+                <h3 style="color: #333;">Output Audio:</h3>
+                <audio controls>
+                    <source src="{{ output_audio }}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                <a href="{{ output_audio }}" download class="app-link" style="display: inline-block; margin-top: 10px;">Download Audio</a>
+            </div>
+        {% endif %}
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 VisionX Studios. All rights reserved.</p>
+</footer>
+
+<script>
+document.getElementById('audioForm').onsubmit = function() {
+    document.getElementById('progressBar').style.display = 'block';
+    var progress = 0;
+    var intervalId = setInterval(function() {
+        progress += 10;
+        if (progress > 100) progress = 100;
+        document.getElementById('progress').style.width = progress + '%';
+        document.getElementById('progress').innerHTML = progress + '%';
+        if (progress == 100) clearInterval(intervalId);
+    }, 500);
+};
+
+document.getElementById('audio-action').addEventListener('change', function() {
+    var uploadSection = document.getElementById('upload-section');
+    var generateSection = document.getElementById('generate-section');
+    if (this.value === 'process') {
+        uploadSection.style.display = 'block';
+        generateSection.style.display = 'none';
+    } else {
+        uploadSection.style.display = 'none';
+        generateSection.style.display = 'block';
+    }
+});
+</script>
+
+</body>
+</html>

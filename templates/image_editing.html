@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Editing</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='css/images/VisionX studio logo.svg') }}" alt="Vision X Studios Logo">
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/image-editing">Image Editing</a></li>
+                <li><a href="/animation">Animation</a></li>
+                <li><a href="/audio-processing">Audio Processing</a></li>
+                <li><a href="/text-generation">Text Generation</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <h1 style="color: white; text-align: center;">AI-Powered Image Editing</h1>
+
+    <div class="form-container" style="background-color: #f2f2f2; padding: 20px; border-radius: 8px; max-width: 800px; margin: 0 auto;">
+        <!-- Form for uploading image and applying edits -->
+        <form method="POST" action="{{ url_for('image_editing') }}" enctype="multipart/form-data" id="image-edit-form">
+            <div class="form-group">
+                <label for="image" style="color: #333;">Upload an image to edit:</label>
+                <input type="file" id="image" name="image" accept="image/*" style="display: block; padding: 10px 0;" required>
+                <small style="color: #666;">Accepted formats: JPG, PNG, GIF (max 5MB)</small>
+            </div>
+            <div class="form-group">
+                <label for="edit-options" style="color: #333;">Select an edit option:</label>
+                <select id="edit-options" name="edit_option" style="width: 100%; padding: 10px;">
+                    <option value="resize">Resize</option>
+                    <option value="crop">Crop</option>
+                    <option value="enhance">Enhance</option>
+                    <option value="filter">Apply Filter</option>
+                    <option value="brightness">Adjust Brightness</option>
+                    <option value="contrast">Adjust Contrast</option>
+                    <option value="rotate">Rotate</option>
+                </select>
+            </div>
+            <button type="submit" class="app-link">Apply Edit</button>
+        </form>
+
+        <!-- Progress bar -->
+        <div id="progress-container" style="display: none; margin-top: 20px;">
+            <div id="progress-bar" style="width: 0%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;">0%</div>
+        </div>
+
+        <!-- Display the edited image if available -->
+        {% if edited_image %}
+            <div class="output-section" style="margin-top: 20px; padding: 10px; background-color: #e9e9e9; border-radius: 5px;">
+                <h3 style="color: #333;">Edited Image:</h3>
+                <img src="{{ edited_image }}" alt="Edited Image" style="max-width: 100%; border-radius: 5px;">
+            </div>
+        {% endif %}
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 VisionX Studios. All rights reserved.</p>
+</footer>
+
+<script>
+document.getElementById('image-edit-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Validate file type and size
+    var fileInput = document.getElementById('image');
+    var file = fileInput.files[0];
+    var allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    var maxSize = 5 * 1024 * 1024; // 5MB
+
+    if (!file) {
+        alert('Please select an image file.');
+        return;
+    }
+
+    if (!allowedTypes.includes(file.type)) {
+        alert('Please upload a valid image file (JPG, PNG, or GIF).');
+        return;
+    }
+
+    if (file.size > maxSize) {
+        alert('File size exceeds 5MB limit. Please choose a smaller file.');
+        return;
+    }
+
+    // Show progress bar
+    var progressContainer = document.getElementById('progress-container');
+    var progressBar = document.getElementById('progress-bar');
+    progressContainer.style.display = 'block';
+
+    // Use FormData to send the form data
+    var formData = new FormData(this);
+
+    // Use fetch API to send the request
+    fetch(this.action, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.text();
+    })
+    .then(html => {
+        // Replace the current page content with the response
+        document.documentElement.innerHTML = html;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred: ' + error.message);
+    })
+    .finally(() => {
+        progressContainer.style.display = 'none';
+    });
+});
+</script>
+
+</body>
+</html>

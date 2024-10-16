@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Text Generation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='css/images/logo.svg') }}" alt="Vision X Studios Logo">
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/image-editing">Image Editing</a></li>
+                <li><a href="/animation">Animation</a></li>
+                <li><a href="/audio-processing">Audio Processing</a></li>
+                <li><a href="/text-generation">Text Generation</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <h1 style="color: white; text-align: center;">AI-Powered Text Generation</h1>
+
+    <div class="form-container" style="background-color: #f2f2f2; padding: 20px; border-radius: 8px; max-width: 800px; margin: 0 auto;">
+        <!-- Form for user input -->
+        <form id="text-generation-form" method="POST" action="{{ url_for('text_generation') }}">
+            <div class="form-group">
+                <label for="user_input" style="color: #333;">Enter a question or prompt:</label>
+                <textarea id="user_input" name="user_input" rows="4" cols="50" placeholder="Type your question or prompt here..." style="width: 100%; padding: 10px;"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="model_selection" style="color: #333;">Select AI Model:</label>
+                <select id="model_selection" name="model_selection" style="width: 100%; padding: 10px;">
+                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                    <option value="gpt-4">GPT-4</option>
+                    <option value="claude-2">Claude 2</option>
+                    <option value="palm">PaLM</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="max_tokens" style="color: #333;">Max Tokens:</label>
+                <input type="number" id="max_tokens" name="max_tokens" min="1" max="4096" value="256" style="width: 100%; padding: 10px;">
+            </div>
+            <div class="form-group">
+                <label for="temperature" style="color: #333;">Temperature:</label>
+                <input type="range" id="temperature" name="temperature" min="0" max="1" step="0.1" value="0.7" style="width: 100%;">
+                <span id="temperature_value" style="color: #333;">0.7</span>
+            </div>
+            <button type="submit" class="app-link" id="generate-button">Generate Text</button>
+        </form>
+
+        <!-- Display the generated text if available -->
+        <div id="output-section" class="output-section" style="margin-top: 20px; padding: 10px; background-color: #e9e9e9; border-radius: 5px; display: none;">
+            <h3 style="color: #333;">Generated Text:</h3>
+            <p id="generated-text"></p>
+        </div>
+
+        <div id="loading-indicator" style="display: none; text-align: center; margin-top: 20px;">
+            <div class="spinner"></div>
+            <p>Generating text...</p>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 VisionX Studios. All rights reserved.</p>
+</footer>
+
+<script>
+    const form = document.getElementById('text-generation-form');
+    const generateButton = document.getElementById('generate-button');
+    const outputSection = document.getElementById('output-section');
+    const generatedText = document.getElementById('generated-text');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const temperatureSlider = document.getElementById('temperature');
+    const temperatureValue = document.getElementById('temperature_value');
+
+    temperatureSlider.addEventListener('input', function() {
+        temperatureValue.textContent = this.value;
+    });
+
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        loadingIndicator.style.display = 'block';
+        generateButton.disabled = true;
+        outputSection.style.display = 'none';
+
+        const formData = new FormData(form);
+        try {
+            const response = await fetch("{{ url_for('text_generation') }}", {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            generatedText.textContent = data.generated_text;
+            outputSection.style.display = 'block';
+        } catch (error) {
+            console.error('Error:', error);
+            generatedText.textContent = 'An error occurred while generating text. Please try again.';
+            outputSection.style.display = 'block';
+        } finally {
+            loadingIndicator.style.display = 'none';
+            generateButton.disabled = false;
+        }
+    });
+</script>
+
+<style>
+    .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+</body>
+</html>

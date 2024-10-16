@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Vision X Studios{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0f172a;
+            --secondary-bg: #1e293b;
+            --accent-color: #3b82f6;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+        }
+        :root.light-mode {
+            --primary-bg: #f8fafc;
+            --secondary-bg: #e2e8f0;
+            --accent-color: #3b82f6;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+        }
+        body {
+            background-image: url("{{ url_for('static', filename='css/images/art1.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+        }
+        .content-wrapper {
+            background-color: rgba(15, 23, 42, 0.8); /* Adjust the last value (0.8) for opacity */
+            min-height: 100vh;
+        }
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+        .card {
+            background-color: var(--secondary-bg);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .input {
+            background-color: var(--secondary-bg);
+            border: 1px solid var(--text-secondary);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+        }
+        .input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        .nav-link {
+            color: var(--text-secondary);
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .dark-mode-toggle {
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            background-color: var(--secondary-bg);
+            color: var(--text-primary);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="min-h-screen flex flex-col">
+    <div class="content-wrapper">
+        <nav class="bg-secondary-bg p-4 shadow-md">
+            <div class="container mx-auto flex justify-between items-center">
+                <a href="{{ url_for('index') }}" class="text-2xl font-bold gradient-text">Vision X Studios</a>
+                <div class="space-x-4 flex items-center">
+                    <a href="{{ url_for('features') }}" class="nav-link">Features</a>
+                    <a href="{{ url_for('models') }}" class="nav-link">Models</a>
+                    <a href="{{ url_for('community') }}" class="nav-link">Community</a>
+                    <a href="{{ url_for('contact') }}" class="nav-link">Contact</a>
+                    <a href="{{ url_for('terms') }}" class="nav-link">terms</a>
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('logout') }}" class="btn-primary">Logout</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn-primary">Login</a>
+                    {% endif %}
+                    <button id="darkModeToggle" class="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="container mx-auto mt-8 flex-grow">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="bg-secondary-bg p-4 mt-8">
+            <div class="container mx-auto text-center text-secondary">
+                &copy; 2024 Vision X Studios. All rights reserved.
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const root = document.documentElement;
+
+        darkModeToggle.addEventListener('click', () => {
+            root.classList.toggle('light-mode');
+        });
+    </script>
+</body>
+</html>

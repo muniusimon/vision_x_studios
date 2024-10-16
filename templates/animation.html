@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Animation Processing and Generation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <a href="/" class="logo-link">
+                <img src="{{ url_for('static', filename='css/images/logo.svg') }}" alt="Vision X Studios Logo">
+            </a>
+        </div>
+        <nav class="navbar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/image-editing">Image Editing</a></li>
+                <li><a href="/animation">Animation</a></li>
+                <li><a href="/audio-processing">Audio Processing</a></li>
+                <li><a href="/text-generation">Text Generation</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <h1 style="color: white; text-align: center;">AI Animation Processing and Generation</h1>
+
+    <div class="form-container" style="background-color: #f2f2f2; padding: 20px; border-radius: 8px; max-width: 800px; margin: 0 auto;">
+        <!-- Form for uploading animation or generating animations -->
+        <form method="POST" action="/animation" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="animation-action" style="color: #333;">Choose an action:</label>
+                <select id="animation-action" name="animation_action" style="width: 100%; padding: 10px;">
+                    <option value="process">Process Existing Animation</option>
+                    <option value="generate">Generate New Animation</option>
+                </select>
+            </div>
+            <div id="upload-section" class="form-group">
+                <label for="animation" style="color: #333;">Upload an animation file:</label>
+                <input type="file" id="animation" name="animation" accept="video/*" style="display: block; padding: 10px 0;">
+            </div>
+            <div id="generate-section" class="form-group" style="display: none;">
+                <label for="animation-text" style="color: #333;">Enter text to generate an animation:</label>
+                <textarea id="animation-text" name="animation_text" rows="4" style="width: 100%; padding: 10px;" placeholder="Describe the animation you want to generate..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="animation-options" style="color: #333;">Select an animation processing option:</label>
+                <select id="animation-options" name="animation_option" style="width: 100%; padding: 10px;">
+                    <option value="speed-up">Speed Up</option>
+                    <option value="slow-down">Slow Down</option>
+                    <option value="apply-filter">Apply Filter</option>
+                    <option value="trim">Trim</option>
+                    <option value="add-overlay">Add Overlay</option>
+                    <option value="adjust-brightness">Adjust Brightness/Contrast</option>
+                </select>
+            </div>
+            <div class="form-group" id="filter-options" style="display: none;">
+                <label for="filter-type" style="color: #333;">Select a filter:</label>
+                <select id="filter-type" name="filter_type" style="width: 100%; padding: 10px;">
+                    <option value="grayscale">Grayscale</option>
+                    <option value="sepia">Sepia</option>
+                    <option value="blur">Blur</option>
+                    <option value="invert">Invert Colors</option>
+                </select>
+            </div>
+            <div id="processing-indicator" style="display: none; text-align: center; margin-top: 20px;">
+                <div class="spinner"></div>
+                <p>Processing your animation...</p>
+            </div>
+            <button type="submit" class="app-link" id="submit-button">Process/Generate Animation</button>
+        </form>
+
+        <!-- Display the processed or generated animation if available -->
+        {% if output_animation %}
+            <div class="output-section" style="margin-top: 20px; padding: 10px; background-color: #e9e9e9; border-radius: 5px;">
+                <h3 style="color: #333;">Output Animation:</h3>
+                <video controls style="max-width: 100%; border-radius: 5px;">
+                    <source src="{{ output_animation }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <a href="{{ output_animation }}" download class="app-link" style="display: inline-block; margin-top: 10px;">Download Animation</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div id="preview-container" style="margin-top: 20px; display: none;">
+        <h3 style="color: #333;">Preview:</h3>
+        <video id="preview-video" controls style="max-width: 100%; border-radius: 5px;">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 VisionX Studios. All rights reserved.</p>
+</footer>
+
+<script>
+    const animationAction = document.getElementById("animation-action");
+    const uploadSection = document.getElementById("upload-section");
+    const generateSection = document.getElementById("generate-section");
+    const animationOptions = document.getElementById("animation-options");
+    const filterOptions = document.getElementById("filter-options");
+    const animationInput = document.getElementById("animation");
+    const previewContainer = document.getElementById("preview-container");
+    const previewVideo = document.getElementById("preview-video");
+    const processingIndicator = document.getElementById("processing-indicator");
+    const submitButton = document.getElementById("submit-button");
+
+    animationAction.addEventListener("change", function() {
+        if (this.value === "process") {
+            uploadSection.style.display = "block";
+            generateSection.style.display = "none";
+            animationOptions.style.display = "block";
+        } else {
+            uploadSection.style.display = "none";
+            generateSection.style.display = "block";
+            animationOptions.style.display = "none";
+        }
+    });
+
+    animationOptions.addEventListener("change", function() {
+        filterOptions.style.display = this.value === "apply-filter" ? "block" : "none";
+    });
+
+    animationInput.addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const objectURL = URL.createObjectURL(file);
+            previewVideo.src = objectURL;
+            previewContainer.style.display = "block";
+        }
+    });
+
+    submitButton.addEventListener("click", async function(event) {
+        event.preventDefault();
+        processingIndicator.style.display = "block";
+        submitButton.disabled = true;
+
+        if (animationAction.value === "generate") {
+            const prompt = document.getElementById("animation-text").value;
+            try {
+                const generatedAnimation = await generateAnimationWithAI(prompt);
+                displayGeneratedAnimation(generatedAnimation);
+            } catch (error) {
+                console.error("Error generating animation:", error);
+                alert("An error occurred while generating the animation. Please try again.");
+            }
+        } else {
+            // Handle processing existing animation
+            document.querySelector("form").submit();
+        }
+
+        processingIndicator.style.display = "none";
+        submitButton.disabled = false;
+    });
+
+    async function generateAnimationWithAI(prompt) {
+        // Replace this with your actual AI animation generation API call
+        const AI_API_URL = 'https://api.example.com/generate-animation';
+        const response = await fetch(AI_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer YOUR_API_KEY'
+            },
+            body: JSON.stringify({ prompt: prompt })
+        });
+
+        if (!response.ok) {
+            throw new Error(`AI API request failed: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data.output.video_url; // Adjust based on the actual API response
+    }
+
+    function displayGeneratedAnimation(videoUrl) {
+        const videoElement = document.createElement('video');
+        videoElement.src = videoUrl;
+        videoElement.controls = true;
+        videoElement.style.maxWidth = '100%';
+        videoElement.style.borderRadius = '5px';
+
+        const downloadLink = document.createElement('a');
+        downloadLink.href = videoUrl;
+        downloadLink.download = 'generated_animation.mp4';
+        downloadLink.className = 'app-link';
+        downloadLink.style.display = 'inline-block';
+        downloadLink.style.marginTop = '10px';
+        downloadLink.textContent = 'Download Animation';
+
+        const outputSection = document.createElement('div');
+        outputSection.className = 'output-section';
+        outputSection.style.marginTop = '20px';
+        outputSection.style.padding = '10px';
+        outputSection.style.backgroundColor = '#e9e9e9';
+        outputSection.style.borderRadius = '5px';
+
+        const heading = document.createElement('h3');
+        heading.textContent = 'Generated Animation:';
+        heading.style.color = '#333';
+
+        outputSection.appendChild(heading);
+        outputSection.appendChild(videoElement);
+        outputSection.appendChild(downloadLink);
+
+        const formContainer = document.querySelector('.form-container');
+        formContainer.appendChild(outputSection);
+    }
+</script>
+
+<style>
+    .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+</body>
+</html>
